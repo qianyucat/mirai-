@@ -19,6 +19,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
@@ -115,6 +116,8 @@ public final class Plugin extends JavaPlugin {
         URL url = new URL(urlString);
         // 打开连接
         URLConnection con = url.openConnection();
+        //添加请求头
+        con.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
         // 输入流
         InputStream is = con.getInputStream();
         // 1K的数据缓冲
@@ -137,7 +140,7 @@ public final class Plugin extends JavaPlugin {
 
     private void cacheImages(int num) {
         getLogger().info("cacheImages");
-        String base_url = "https://olaindex.qianyucat.top/v/pic/picture/";
+        String base_url = "http://pan-yz.chaoxing.com/external/m/file/";
         List<String> urls = new ArrayList<String>();
         int i = config.index;
         int n = i + num;
@@ -145,6 +148,10 @@ public final class Plugin extends JavaPlugin {
         while (i < n) {
             urls.add(base_url + config.picName.get(i));
             i++;
+        }
+        //超星获取直链
+        for(int k=0;k < urls.size(); k++) {
+            urls.set(k,getRequest.getUrl(urls.get(k)));
         }
 
         //开始缓存图片
